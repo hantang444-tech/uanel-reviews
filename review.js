@@ -206,6 +206,27 @@
     });
   }
 
+  // ---------- horizontal scroll (home) ----------
+  function mountHS(root){
+    if (root.dataset.ready) return; root.dataset.ready = '1'; root.classList.add('uan-rv-hs');
+    var pc = root.getAttribute('data-product'), N = +(root.getAttribute('data-count') || 6);
+    root.innerHTML = '<div class="op">' + INFO + '리뷰 운영방식</div><div class="nav"><button type="button" class="p" aria-label="이전">‹</button><span class="c"></span><button type="button" class="n" aria-label="다음">›</button></div><div class="vp"><div class="row"></div></div>';
+    var row = root.querySelector('.row'), page = 0, pages = 1;
+    function per(){ return window.innerWidth < 768 ? 0 : 3; }
+    function paint(){ var k = per(); if (!k){ row.style.transform = ''; return; } pages = Math.max(1, Math.ceil(row.children.length / k)); if (page >= pages) page = pages - 1; row.style.transform = 'translateX(calc(' + (-page * 100) + '% - ' + (page * 20) + 'px))'; root.querySelector('.c').textContent = (page + 1) + '/' + pages; }
+    load().then(function(D){
+      var list = ((D.prod[pc] || {}).gal || []).slice(0, N).map(function(x){ return {r:D.byId[x[0]], pin:x[1]}; }).filter(function(x){ return x.r; });
+      fetchRows(list.map(function(x){ return x.r; })).then(function(vs){
+        row.innerHTML = vs.map(function(v, i){ return '<button type="button" class="card" data-id="' + v.id + '"><span class="ph">' + galThumb(v) + '</span><span class="tx">' + esc(v.m) + '</span><span class="st">' + stars(v.s, 14) + '</span><span class="nm">' + esc(v.n) + '</span>' + (list[i].pin ? '<span class="rv-pin">쇼핑몰 추천</span>' : '') + '</button>'; }).join('');
+        paint();
+      });
+    });
+    root.querySelector('.p').onclick = function(){ page = (page + pages - 1) % pages; paint(); };
+    root.querySelector('.n').onclick = function(){ page = (page + 1) % pages; paint(); };
+    window.addEventListener('resize', paint);
+    row.addEventListener('click', function(e){ var c = e.target.closest('.card'); if (c) openReview(+c.dataset.id); });
+  }
+
   // ---------- product page wiring ----------
   function productPage(){
     var mm = location.search.match(/[?&]idx=(\d+)/), pc = mm && mm[1];
@@ -243,8 +264,9 @@
   function boot(){
     var r = document.getElementById('uan-rv'); if (r) mountList(r);
     document.querySelectorAll('.uan-rv[data-product]').forEach(function(x){ mountList(x); });
+    document.querySelectorAll('.uan-rv-hs-host[data-product]').forEach(function(x){ mountHS(x); });
     productPage();
   }
   var tries = 0;
-  (function wait(){ if (document.getElementById('uan-rv') || document.querySelector('#prod_goods_form') || tries > 40) boot(); else { tries++; setTimeout(wait, 250); } })();
+  (function wait(){ if (document.getElementById('uan-rv') || document.querySelector('#prod_goods_form') || document.querySelector('.uan-rv-hs-host') || tries > 40) boot(); else { tries++; setTimeout(wait, 250); } })();
 })();
