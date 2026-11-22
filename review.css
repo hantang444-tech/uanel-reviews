@@ -88,7 +88,7 @@
 .uan-rv .rv-strip .play::after,.uan-rv-gal .play::after,.uan-rv-opt .play::after{content:"";border-left:12px solid rgba(255,255,255,.9);border-top:8px solid transparent;border-bottom:8px solid transparent}
 .uan-rv .rv-pin,.uan-rv-gal .rv-pin{display:inline-block;font-size:11px;line-height:1;padding:4px 6px;border:1px solid #d5d9de;border-radius:2px;color:var(--ink,#14161a);background:#fff;margin-bottom:8px}
 .uan-rv-host{margin-top:32px}
-.uan-rv-gal{position:relative;padding:28px 0 8px;font-family:system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+.uan-rv-gal{position:relative;padding:28px 0 8px;margin:40px 0 25px;font-family:system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
 .uan-rv-gal *{box-sizing:border-box}.uan-rv-gal button{font:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:inherit}
 .uan-rv-gal .op{position:absolute;right:0;top:0;font-size:12px;color:#bcc2cc}
 .uan-rv-gal .cards{display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
@@ -101,7 +101,8 @@
 .uan-rv-gal .rv-pg button{min-width:24px;height:24px;border-radius:4px;color:#707680;text-align:center}
 .uan-rv-gal .rv-pg button.on{background:#eef0f3;color:#14161a}.uan-rv-gal .rv-pg button:disabled{color:#bcc2cc;cursor:default}
 .uan-rv-gal.mo{display:none}
-.uan-rv-opt{margin:0 0 24px;padding:16px;border:1px solid #e8eaed;border-radius:4px;font-family:system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:#14161a;background:#fff}
+.uan-rv-opt-wrap{margin-bottom:32px}
+.uan-rv-opt{margin:0;padding:16px;border:1px solid #e8eaed;border-radius:4px;font-family:system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:#14161a;background:#fff}
 .uan-rv-opt *{box-sizing:border-box}.uan-rv-opt button{font:inherit;background:none;border:0;padding:0;cursor:pointer;color:inherit}
 .uan-rv-opt .hd{display:flex;gap:8px;align-items:center;font-size:13px;margin-bottom:10px}.uan-rv-opt .hd b{font-weight:700}.uan-rv-opt .hd span{font-size:11px;color:#bcc2cc}
 .uan-rv-opt select{border:0;font-size:12px;color:#707680;background:none;margin-bottom:12px;padding:0}
@@ -112,7 +113,7 @@
 .uan-rv-opt .tx p{margin:6px 0 0;font-size:12px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .uan-rv-opt .nav{display:flex;justify-content:flex-end;align-items:center;gap:6px;font-size:11px;color:#707680;margin-top:6px}
 @media (max-width:767px){
-.uan-rv-gal.pc{display:none}.uan-rv-gal.mo{display:block;padding:24px 0 0}
+.uan-rv-gal.pc{display:none}.uan-rv-gal.mo{display:block;padding:24px 16px 0;margin:0}
 .uan-rv-gal .cards{grid-template-columns:repeat(3,1fr);gap:10px}
 .uan-rv-opt-wrap{display:none}
 .uan-rv .rv-sum{display:block;padding:8px 16px 24px}.uan-rv .rv-sum .avg{width:auto;border:0}.uan-rv .rv-sum .dist{padding:16px 0 0}

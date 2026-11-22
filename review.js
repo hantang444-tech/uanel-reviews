@@ -185,28 +185,31 @@
     if (!document.querySelector('#prod_goods_form')) return;
     load().then(function(D){
       var cnt = Number((D.meta.products[pc] || {}).count || 0).toLocaleString();
-      document.querySelectorAll('.site_prod_nav a._review .badge, a._review .braket-badge').forEach(function(b){ b.innerHTML = '<span class="crema-product-reviews-count">' + cnt + '</span>'; });
       document.querySelectorAll('._review_count_text').forEach(function(b){ b.textContent = cnt; });
-      document.querySelectorAll('.categorize-mobile a, .categorize-mobile li').forEach(function(a){ if (/^구매평/.test(a.textContent.trim()) && a.childElementCount === 0) a.textContent = '구매평 (' + cnt + ')'; });
-      document.querySelectorAll('[class*=categorize] a').forEach(function(a){ var s = a.querySelector('span, small'); if (/^구매평/.test(a.textContent.trim()) && s && /^\(?0\)?$/.test(s.textContent.trim())) s.textContent = '(' + cnt + ')'; });
+      document.querySelectorAll('a._review .braket-badge, a._review .badge').forEach(function(b){ if (!b.querySelector('.crema-product-reviews-count')) b.innerHTML = '<span class="crema-product-reviews-count">' + cnt + '</span>'; });
     });
-    // option box: before the PC buy buttons
     var form = document.querySelector('#prod_goods_form');
-    var buy = form && [].slice.call(form.querySelectorAll('._btn_buy')).filter(function(b){ return !b.closest('.pay-box, .categorize-mobile, [class*=mobile]'); })[0];
-    var btnRow = buy && buy.closest('.buy_btns, .btn-group, .tw-flex, div');
-    while (btnRow && btnRow.parentElement && btnRow.parentElement !== form && btnRow.parentElement.querySelectorAll('._btn_buy').length === 1 && btnRow.parentElement.childElementCount === 1) btnRow = btnRow.parentElement;
-    if (btnRow && !document.querySelector('.uan-rv-opt')){ var o = document.createElement('div'); o.className = 'uan-rv-opt-wrap'; btnRow.parentNode.insertBefore(o, btnRow); mountOptions(o, pc); }
-    // gallery: PC before the tab box, mobile before the mobile tabs
-    var rb = document.querySelector('.categorize.review-box');
-    if (rb && !document.querySelector('.uan-rv-gal.pc')){ var g1 = document.createElement('div'); g1.className = 'pc'; rb.parentNode.insertBefore(g1, rb); mountGallery(g1, pc, 8); }
-    var cm = document.querySelector('.categorize-mobile._categorize_mobile');
+    // option box: same slot as main (_external_widget_button_pc_position: after .opt-group, before .buy_btns.holder.pc)
+    var pcBtns = form && form.querySelector(':scope > .buy_btns.holder.pc');
+    if (pcBtns && !document.querySelector('.uan-rv-opt-wrap')){ var o = document.createElement('div'); o.className = 'uan-rv-opt-wrap'; pcBtns.parentNode.insertBefore(o, pcBtns); var oi = document.createElement('div'); o.appendChild(oi); mountOptions(oi, pc); }
+    // PC gallery: after .row.goods_wrapper (main: _external_widget_tap_pc_position)
+    var gw = document.querySelector('#prod_detail .row.goods_wrapper');
+    if (gw && !document.querySelector('.uan-rv-gal.pc')){ var g1 = document.createElement('div'); g1.className = 'pc'; gw.parentNode.insertBefore(g1, gw.nextSibling); mountGallery(g1, pc, 8); }
+    // mobile gallery: after ._today_arrival_wrap, before .categorize-mobile._categorize_mobile (main: _external_widget_tap_mo_position)
+    var cm = form && form.querySelector(':scope > .categorize-mobile._categorize_mobile');
     if (cm && !document.querySelector('.uan-rv-gal.mo')){ var g2 = document.createElement('div'); g2.className = 'mo'; cm.parentNode.insertBefore(g2, cm); mountGallery(g2, pc, 3); }
-    // review lists in the review tab (PC + mobile)
-    [['#first_review', 'pc'], ['.detail_review_wrap_mobile', 'mo']].forEach(function(x){
-      var host = document.querySelector(x[0]); if (!host || host.querySelector('.uan-rv')) return;
-      host.querySelectorAll('._review_wrap').forEach(function(w){ w.style.display = 'none'; });
-      var d = document.createElement('div'); d.className = 'uan-rv-host ' + x[1]; d.setAttribute('data-product', pc); host.appendChild(d); mountList(d);
-    });
+    // PC review tab: main keeps only the crema list inside #first_review._detail_review_wrap
+    var pw = document.querySelector('.categorize.review-box #first_review._detail_review_wrap, #first_review._detail_review_wrap');
+    if (pw && !pw.querySelector('.uan-rv-host')){
+      [].forEach.call(pw.children, function(c){ if (!c.classList.contains('_prod_detail_tab_target')) c.style.display = 'none'; });
+      var d1 = document.createElement('div'); d1.className = 'uan-rv-host pc'; d1.setAttribute('data-product', pc); pw.appendChild(d1); mountList(d1);
+    }
+    // mobile review tab: main keeps only the crema list inside .detail_review_wrap_mobile
+    var mw = document.querySelector('.detail_review_wrap_mobile');
+    if (mw && !mw.querySelector('.uan-rv-host')){
+      [].forEach.call(mw.children, function(c){ if (!c.classList.contains('_prod_detail_tab_target')) c.style.display = 'none'; });
+      var d2 = document.createElement('div'); d2.className = 'uan-rv-host mo'; d2.setAttribute('data-product', pc); mw.appendChild(d2); mountList(d2);
+    }
   }
 
   function boot(){
