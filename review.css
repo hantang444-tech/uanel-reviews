@@ -120,3 +120,109 @@
 .uan-rv .rv-strip{padding:20px 16px}
 .uan-rv .rv-pin{margin-bottom:6px}
 }
+
+/* ===== product page: match Crema widgets (measured 2026-11-22) ===== */
+.uan-rv-gal{padding:50px 16px 0;margin:40px 0 25px}
+.uan-rv-gal .op{top:16px;right:16px;display:flex;align-items:center;gap:4px;font-size:12px;line-height:18px;color:#bcc2cc}
+.uan-rv-gal .cards{grid-template-columns:repeat(8,minmax(100px,1fr));column-gap:20px;row-gap:20px}
+.uan-rv-gal .card{gap:0}
+.uan-rv-gal .ph{margin-bottom:8px}
+.uan-rv-gal .ph .mi{position:absolute;top:8px;right:8px}
+.uan-rv-gal .tx{font-size:13px;line-height:18px;color:#14161a}
+.uan-rv-gal .st{margin-top:7px;height:14px}.uan-rv-gal .st svg{width:14px;height:14px;margin-right:2px}
+.uan-rv-gal .nm{margin-top:9px;font-size:12px;line-height:18px;color:#707680}
+.uan-rv-gal .rv-pin{margin:8px 0 0;font-size:12px;line-height:18px;padding:4px 8px;font-weight:700;color:#707680;background:#fafcff;border:1px solid #ebeff5;border-radius:2px}
+.uan-rv-gal .rv-pg{padding:16px 0 16px;gap:0}
+.uan-rv-gal .rv-pg button{width:24px;min-width:24px;height:24px;border-radius:0;font-size:14px;line-height:20px;color:#bcc2cc;text-align:center;margin:0 2px}
+.uan-rv-gal .rv-pg button.on{background:#ebeff5;color:#14161a}.uan-rv-gal .rv-pg button:disabled{color:#d8dde6}
+.uan-rv.pm{max-width:none}
+.uan-rv.pm .rv-title{display:flex;align-items:center;gap:24px;font-size:20px;line-height:30px;padding:0 0 20px}
+.uan-rv.pm .rv-title .op{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:400;color:#bcc2cc}
+.uan-rv.pm .rv-sum{display:flex;align-items:center;padding:40px 0;border-bottom:1px solid #ebeff5}
+.uan-rv.pm .rv-sum .avg{width:334px;border:0;padding:0;text-align:center}
+.uan-rv.pm .rv-sum .sc{gap:2px;font-size:40px;line-height:48px}
+.uan-rv.pm .rv-sum .pct{margin:12px 0 0;font-size:14px;line-height:20px;color:#14161a}
+.uan-rv.pm .rv-sum .cnt{margin:12px 0 0;font-size:14px;line-height:20px;color:#707680}
+.uan-rv.pm .rv-sum .dv{display:block;width:1px;height:132px;background:#ebeff5}
+.uan-rv.pm .rv-sum .dist{flex:1;padding:0 0 0 40px}
+.uan-rv.pm .rv-sum .dist li{height:28px;gap:16px;font-size:14px;color:#707680;font-weight:400}
+.uan-rv.pm .rv-sum .dist li.top{color:#14161a;font-weight:700}
+.uan-rv.pm .rv-sum .dist .l{width:70px}.uan-rv.pm .rv-sum .dist .n{width:34px;text-align:right}
+.uan-rv.pm .rv-sum .dist .b{height:10px;border-radius:8px;background:#f2f4f7}
+.uan-rv.pm .rv-sum .dist .b i{min-width:12px;border-radius:8px;background:#bcc2cc}.uan-rv.pm .rv-sum .dist li.top .b i{background:#14161a}
+.uan-rv.pm .rv-strip{padding:40px 0;border-bottom:1px solid #ebeff5}
+.uan-rv.pm .rv-strip .hd{margin-bottom:16px}.uan-rv.pm .rv-strip .hd b{font-size:16px;line-height:24px}
+.uan-rv.pm .rv-strip .all{font-size:12px;color:#707680}
+.uan-rv.pm .rv-strip .row{gap:8px}.uan-rv.pm .rv-strip .t{flex:0 0 153px;height:153px}
+.uan-rv.pm .rv-strip .play{display:none}
+.uan-rv.pm .rv-strip .more{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);color:#fff;font-size:12px}
+.uan-rv.pm .rv-bar{padding:24px 16px;gap:16px}
+.uan-rv.pm .rv-sort{gap:8px}.uan-rv.pm .rv-sort button{padding:6px 4px;font-size:14px;color:#bcc2cc}.uan-rv.pm .rv-sort button.on{color:#14161a}
+.uan-rv.pm .rv-sort .rv-sel{display:none}
+.uan-rv.pm .rv-media{margin-left:auto}
+.uan-rv.pm .rv-item{padding:40px 0;border-bottom:1px solid #ebeff5}
+.uan-rv.pm .rv-main{padding-right:40px;border-right:0}
+.uan-rv.pm .rv-side{width:292px;padding-left:41px;border-left:0}
+.uan-rv.pm .rv-side b{font-size:13px;line-height:18px;color:#14161a;margin-bottom:17px}
+.uan-rv.pm .rv-side .g,.uan-rv.pm .rv-who .g{font-size:12px;line-height:16px;color:#707680}
+.uan-rv.pm .rv-side .g span,.uan-rv.pm .rv-who .g span{font-weight:700;color:#707680}
+.uan-rv.pm .rv-tag{display:inline-block;align-self:flex-start;font-size:12px;line-height:18px;font-weight:700;color:#14161a;background:#e7e8e8;border-radius:4px;padding:3px 6px;margin-bottom:16px}
+.uan-rv.pm .rv-stars{margin-bottom:12px;height:16px}.uan-rv.pm .rv-stars svg{width:16px;height:16px;margin-right:2px}
+.uan-rv.pm .rv-msg{font-size:14px;line-height:20px;color:#000;white-space:pre-line}
+.uan-rv.pm .rv-msg.clamp{white-space:pre-line;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.uan-rv.pm .rv-more{font-size:12px;color:#14161a;margin:4px 0 0 auto}
+.uan-rv.pm .rv-thumbs{margin-top:20px;gap:8px}.uan-rv.pm .rv-thumbs .t{flex:0 0 160px;height:160px}
+.uan-rv.pm .rv-like{margin-top:16px;gap:17px;font-size:12px;color:#707680}
+.uan-rv.pm .rv-like svg{width:16px;height:16px;margin-right:4px;vertical-align:-4px}
+.uan-rv.pm .rv-like b{font-weight:700}
+@media (min-width:768px){.uan-rv.pm .rv-who{display:none}}
+@media (max-width:767px){
+.uan-rv-gal{padding:50px 16px 0;margin:0}
+.uan-rv-gal .op{top:16px;right:16px}
+.uan-rv-gal .cards{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:14px}
+.uan-rv-gal .tx{font-size:12px}
+.uan-rv-gal .st{margin-top:7px;height:12px}.uan-rv-gal .st svg{width:12px;height:12px}
+.uan-rv-gal .nm{margin-top:9px;font-size:10px;line-height:14px}
+.uan-rv-gal .rv-pin{margin-top:8px;font-size:10px;line-height:14px;padding:0 3px}
+.uan-rv.pm .rv-title{font-size:16px;line-height:24px;padding:16px;gap:8px}
+.uan-rv.pm .rv-sum{padding:24px 16px}
+.uan-rv.pm .rv-sum .avg{width:102px}
+.uan-rv.pm .rv-sum .sc{font-size:24px;line-height:32px}.uan-rv.pm .rv-sum .sc svg{width:22px;height:22px}
+.uan-rv.pm .rv-sum .pct{display:none}
+.uan-rv.pm .rv-sum .cnt{margin-top:4px;font-size:12px;line-height:18px}
+.uan-rv.pm .rv-sum .dv{height:114px}
+.uan-rv.pm .rv-sum .dist{padding:0 0 0 28px}
+.uan-rv.pm .rv-sum .dist li{height:22px;gap:12px;font-size:12px}
+.uan-rv.pm .rv-sum .dist .l{width:60px}
+.uan-rv.pm .rv-sum .dist .b{height:6px}
+.uan-rv.pm .rv-strip{padding:24px 16px}
+.uan-rv.pm .rv-strip .row{gap:4px}.uan-rv.pm .rv-strip .t{flex-basis:80px;height:80px}
+.uan-rv.pm .rv-bar{padding:20px 16px}
+.uan-rv.pm .rv-sort button{display:none}
+.uan-rv.pm .rv-sort .rv-sel{display:block;border:0;background:none;font-size:14px;color:#14161a;padding:0 4px 0 0}
+.uan-rv.pm .rv-media{margin-left:0}
+.uan-rv.pm .rv-item{padding:32px 16px}
+.uan-rv.pm .rv-tag{font-size:10px;line-height:14px;padding:3px 4px;margin-bottom:12px}
+.uan-rv.pm .rv-who{order:0;margin-bottom:12px}
+.uan-rv.pm .rv-who b{font-size:12px;line-height:18px;color:#14161a;margin:0}
+.uan-rv.pm .rv-stars svg{width:14px;height:14px}
+.uan-rv.pm .rv-thumbs .t{flex-basis:152px;height:152px}
+}
+
+.uan-rv-opt{padding:16px;border:1px solid #ebeff5;border-radius:4px;min-height:232px}
+.uan-rv-opt .hd{gap:24px;font-size:14px;line-height:20px;margin-bottom:20px}.uan-rv-opt .hd b{font-weight:400;color:#000}
+.uan-rv-opt .hd span{display:flex;align-items:center;gap:4px;font-size:12px;color:#bcc2cc}
+.uan-rv-opt select{appearance:none;-webkit-appearance:none;border:1px solid #ebeff5;border-radius:4px;height:29px;padding:0 26px 0 9px;font-size:12px;color:#14161a;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M.5.5l3.5 3.5L7.5.5' stroke='%23bcc2cc' fill='none'/%3E%3C/svg%3E") right 9px center no-repeat;margin-bottom:13px}
+.uan-rv-opt .bd{gap:12px;min-height:90px}
+.uan-rv-opt .ph{flex:0 0 90px;height:90px}
+.uan-rv-opt .st{gap:6px}.uan-rv-opt .st svg{width:16px;height:16px;margin-right:1px}.uan-rv-opt .st b{font-size:14px;line-height:20px;font-weight:700;color:#14161a}
+.uan-rv-opt .tx p{margin:8px 0 0;font-size:13px;line-height:18px;color:#14161a}
+.uan-rv-opt .nav{margin-top:8px;font-size:12px;line-height:18px;color:#707680;gap:4px}.uan-rv-opt .nav button{color:#bcc2cc;font-size:14px}
+.uan-rv.pm .rv-sum .dist .l,.uan-rv.pm .rv-sum .dist .n{flex-shrink:0;white-space:nowrap}
+.uan-rv.pm .rv-sum .dist .l{width:86px}
+@media (min-width:768px){.uan-rv .rv-search .lbl{display:none}.uan-rv.pm .rv-search{border:0;border-bottom:1px solid #ebeff5;border-radius:0;width:197px;padding:0}}
+@media (max-width:767px){.uan-rv.pm .rv-sum .dist .l{width:60px}}
+@media (min-width:768px){.uan-rv.pm .rv-side{border-left:1px solid #ebeff5;padding-left:40px;width:332px}}
+.uan-rv.pm .rv-pg{padding:32px 0;gap:0}
+.uan-rv.pm .rv-pg button{width:24px;min-width:24px;height:24px;border-radius:0;font-size:14px;line-height:20px;color:#bcc2cc;margin:0 2px}
+.uan-rv.pm .rv-pg button.on{background:#ebeff5;color:#14161a}.uan-rv.pm .rv-pg button:disabled{color:#d8dde6}

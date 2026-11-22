@@ -6,6 +6,10 @@
   var STAR_P = 'M12 2.5l2.9 6.2 6.6.7-5 4.5 1.4 6.6L12 17.2l-5.9 3.3 1.4-6.6-5-4.5 6.6-.7z';
   function star(c, s){ return '<svg viewBox="0 0 24 24" width="' + (s || 18) + '" height="' + (s || 18) + '"><path fill="' + c + '" d="' + STAR_P + '"/></svg>'; }
   function stars(n, s){ var h = ''; for (var k = 1; k <= 5; k++) h += star(k <= n ? '#14161a' : '#e1e4e8', s); return h; }
+  var INFO = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#bcc2cc"><circle cx="6" cy="6" r="5.5"/><path d="M6 5.2v3.3M6 3.4v.1" stroke-linecap="round"/></svg>';
+  var THUMB = '<svg viewBox="0 0 24 24"><path d="M7 10v11H3V10zM7 10l4-8c1.7 0 3 1.3 3 3v4h5.5a2 2 0 012 2.3l-1.4 8A2 2 0 0118.1 21H7"/></svg>';
+  var THUMB_D = '<svg viewBox="0 0 24 24" style="transform:scaleY(-1)"><path d="M7 10v11H3V10zM7 10l4-8c1.7 0 3 1.3 3 3v4h5.5a2 2 0 012 2.3l-1.4 8A2 2 0 0118.1 21H7"/></svg>';
+  var CMT = '<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>';
   var LABEL = {5:'아주 좋아요', 4:'맘에 들어요', 3:'보통이에요', 2:'그냥 그래요', 1:'별로예요'};
   function u(p){ return !p ? '' : p.indexOf('A/') === 0 ? A + p.slice(2) : p.indexOf('V/') === 0 ? V + p.slice(2) : p; }
   function gal(p){ var s = u(p), i = s.lastIndexOf('/'); return s.slice(0, i + 1) + 'gallery_' + s.slice(i + 1); }
@@ -61,13 +65,14 @@
     var fixed = root.getAttribute('data-product') || '';
     if (fixed === 'auto'){ var mm = location.search.match(/[?&]idx=(\d+)/); fixed = mm ? mm[1] : ''; if (fixed !== '10' && fixed !== '13'){ (root.closest('[doz_type=widget]') || root).style.display = 'none'; return; } }
     var product = !!fixed;
-    root.innerHTML = '<div class="rv-title">REVIEW</div>' + (product ? '<div class="rv-sum"></div><div class="rv-strip"></div>' : '')
-      + '<div class="rv-bar"><div class="rv-sort"><button type="button" class="star" data-sort="score">별점순</button><button type="button" class="ai on" data-sort="ai">AI 추천순</button></div>'
+    if (product) root.classList.add('pm');
+    root.innerHTML = (product ? '<div class="rv-title">REVIEW<span class="op">' + INFO + '리뷰 운영방식</span></div><div class="rv-sum"></div><div class="rv-strip"></div>' : '<div class="rv-title">REVIEW</div>')
+      + '<div class="rv-bar"><div class="rv-sort">' + (product ? '<button type="button" class="ai on" data-sort="ai">AI 추천순</button><button type="button" class="star" data-sort="score">별점순</button><select class="rv-sel" aria-label="리뷰 정렬"><option value="ai">AI 추천순</option><option value="score">별점순</option></select>' : '<button type="button" class="star" data-sort="score">별점순</button><button type="button" class="ai on" data-sort="ai">AI 추천순</button>') + '</div>'
       + '<button type="button" class="rv-media"><i></i>포토/동영상 먼저 보기</button>'
       + '<label class="rv-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bcc2cc" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lbl">검색</span><input type="search" placeholder="리뷰 키워드 검색" enterkeyhint="search"></label></div>'
       + (product ? '' : '<div class="rv-cat"><select aria-label="카테고리"><option value="">카테고리: 전체</option><option value="10">카테고리: 풋 케어</option><option value="13">카테고리: 네일·핸드 케어</option></select></div>')
       + '<div class="rv-list"><div class="rv-empty">리뷰를 불러오는 중입니다.</div></div><div class="rv-pg"></div>';
-    var PER = 20, D, state = {sort:'ai', media:false, cat:fixed, q:'', page:1, hit:null}, rank = {}, pinned = {};
+    var PER = product ? 5 : 20, D, state = {sort:'ai', media:false, cat:fixed, q:'', page:1, hit:null}, rank = {}, pinned = {};
     function view(){
       var rows = D.idx.filter(function(r){ return (!state.cat || String(r[2]) === state.cat) && (!state.hit || state.hit[r[0]]); });
       var cmp = product ? function(a, b){ var ra = rank[a[0]], rb = rank[b[0]]; return (ra == null) - (rb == null) || (ra != null ? ra - rb : 0) || aiCmp(a, b); } : aiCmp;
@@ -83,13 +88,14 @@
         .catch(function(){ list.innerHTML = '<div class="rv-empty">리뷰를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</div>'; });
     }
     function item(v){
+      if (product) return pitem(v);
       var p = D.meta.products[v.p] || {}, d = String(v.d), media = thumbs(v);
       var grade = esc(D.meta.grades[v.g] || D.meta.grades.def), name = esc(v.n), date = d.slice(0,4) + '.' + d.slice(4,6) + '.' + d.slice(6,8);
       var long = (v.m || '').length > 40 || /\n/.test(v.m || '');
       return '<div class="rv-item"><div class="rv-main">'
-        + (product ? '' : '<a class="rv-prod" href="' + esc(p.url) + '"><img src="' + esc(p.img) + '" alt=""><div style="min-width:0"><div class="nm">' + esc(p.name) + '</div><div class="mt">' + star('#14161a', 14) + '<b>' + esc(p.score) + '</b> 리뷰 ' + Number(p.count || 0).toLocaleString() + '</div></div></a>')
+        + '<a class="rv-prod" href="' + esc(p.url) + '"><img src="' + esc(p.img) + '" alt=""><div style="min-width:0"><div class="nm">' + esc(p.name) + '</div><div class="mt">' + star('#14161a', 14) + '<b>' + esc(p.score) + '</b> 리뷰 ' + Number(p.count || 0).toLocaleString() + '</div></div></a>'
         + '<div class="rv-who"><b>' + name + '</b>작성자 등급 ' + grade + '</div>'
-        + '<div class="rv-body">' + (product && pinned[v.id] ? '<span class="rv-pin">쇼핑몰 추천</span>' : '')
+        + '<div class="rv-body">'
         + '<div class="rv-stars" aria-label="별점 ' + v.s + '점">' + stars(v.s) + '</div>'
         + '<div class="rv-msg' + (long ? ' clamp' : '') + '">' + esc(v.m) + '</div>'
         + (long ? '<button type="button" class="rv-more">리뷰 더보기</button>' : '')
@@ -97,21 +103,35 @@
         + '<div class="rv-like"><span><svg viewBox="0 0 24 24"><path d="M7 10v11H3V10zM7 10l4-8c1.7 0 3 1.3 3 3v4h5.5a2 2 0 012 2.3l-1.4 8A2 2 0 0118.1 21H7"/></svg>도움돼요 ' + (v.l ? '<b>' + v.l + '</b>' : '') + '</span><span class="cm">댓글 <b>' + (v.c || 0) + '</b></span><span style="margin-left:auto">' + date + '</span></div></div>'
         + '</div><div class="rv-side"><b>' + name + '</b><span>작성자 등급</span> <em>' + grade + '</em></div></div>';
     }
+    function pitem(v){
+      var media = thumbs(v), grade = esc(D.meta.grades[v.g] || D.meta.grades.def), name = esc(v.n);
+      var long = (v.m || '').length > 60 || ((v.m || '').match(/\n/g) || []).length > 1;
+      var who = '<b>' + name + '</b><span class="g"><span>작성자 등급</span> ' + grade + '</span>';
+      return '<div class="rv-item"><div class="rv-main">'
+        + (pinned[v.id] ? '<span class="rv-tag">쇼핑몰 추천</span>' : '')
+        + '<div class="rv-who">' + who + '</div>'
+        + '<div class="rv-stars" aria-label="별점 ' + v.s + '점">' + stars(v.s, 16) + '</div>'
+        + '<div class="rv-msg' + (long ? ' clamp' : '') + '">' + esc(v.m) + '</div>'
+        + (long ? '<button type="button" class="rv-more">리뷰 더보기</button>' : '')
+        + (media ? '<div class="rv-thumbs">' + media + '</div>' : '')
+        + '<div class="rv-like"><span>' + THUMB + '도움돼요' + (v.l ? ' <b>' + v.l + '</b>' : '') + '</span><span>' + THUMB_D + '도움안돼요</span><span>' + CMT + '댓글 <b>' + (v.c || 0) + '</b></span></div>'
+        + '</div><div class="rv-side">' + who + '</div></div>';
+    }
     function pager(pages){
-      var g = Math.floor((state.page - 1) / 5) * 5, h = '<button type="button" data-p="' + Math.max(1, g) + '"' + (g ? '' : ' disabled') + '>‹</button>';
-      for (var i = g + 1; i <= Math.min(pages, g + 5); i++) h += '<button type="button" data-p="' + i + '"' + (i === state.page ? ' class="on"' : '') + '>' + i + '</button>';
-      h += '<button type="button" data-p="' + (g + 6) + '"' + (g + 5 < pages ? '' : ' disabled') + '>›</button>';
+      var G = product && window.innerWidth < 768 ? 4 : 5, g = Math.floor((state.page - 1) / G) * G, h = '<button type="button" data-p="' + Math.max(1, g) + '"' + (g ? '' : ' disabled') + '>‹</button>';
+      for (var i = g + 1; i <= Math.min(pages, g + G); i++) h += '<button type="button" data-p="' + i + '"' + (i === state.page ? ' class="on"' : '') + '>' + i + '</button>';
+      h += '<button type="button" data-p="' + (g + G + 1) + '"' + (g + G < pages ? '' : ' disabled') + '>›</button>';
       root.querySelector('.rv-pg').innerHTML = pages > 1 ? h : '';
     }
     function go(p, noScroll){ state.page = p; render(); if (!noScroll) window.scrollTo(0, root.getBoundingClientRect().top + window.pageYOffset - 80); }
     function summary(){
-      var P = D.prod[fixed] || {}, meta = D.meta.products[fixed] || {}, dist = P.dist || [0,0,0,0,0], max = Math.max.apply(null, dist) || 1;
-      var bars = [5,4,3,2,1].map(function(s, i){ return '<li' + (i === 0 ? ' class="top"' : '') + '><span class="l">' + LABEL[s] + '</span><span class="b"><i style="width:' + Math.round(dist[i] / max * 100) + '%"></i></span><span class="n">' + dist[i] + '</span></li>'; }).join('');
-      root.querySelector('.rv-sum').innerHTML = '<div class="avg"><div class="sc">' + star('#14161a', 34) + '<b>' + esc(meta.score) + '</b></div><p>' + (P.pct || 0) + '%가 <b>아주 좋아요</b> 라고 평가했습니다.</p><p class="cnt">리뷰 ' + Number(meta.count || 0).toLocaleString() + '개</p></div><ul class="dist">' + bars + '</ul>';
+      var P = D.prod[fixed] || {}, meta = D.meta.products[fixed] || {}, dist = P.dist || [0,0,0,0,0], tot = dist.reduce(function(a, b){ return a + b; }, 0) || 1;
+      var bars = [5,4,3,2,1].map(function(s, i){ return '<li' + (i === 0 ? ' class="top"' : '') + '><span class="l">' + LABEL[s] + '</span><span class="b"><i style="width:' + (dist[i] / tot * 100).toFixed(1) + '%"></i></span><span class="n">' + dist[i] + '</span></li>'; }).join('');
+      root.querySelector('.rv-sum').innerHTML = '<div class="avg"><div class="sc">' + star('#14161a', 40) + '<b>' + esc(meta.score) + '</b></div><p class="pct">' + (P.pct || 0) + '%가 <b>아주 좋아요</b> 라고 평가했습니다.</p><p class="cnt">리뷰 ' + Number(meta.count || 0).toLocaleString() + '개</p></div><i class="dv"></i><ul class="dist">' + bars + '</ul>';
       var ids = (P.gal || []).map(function(x){ return D.byId[x[0]]; }).filter(Boolean).slice(0, 20);
       fetchRows(ids).then(function(vs){
         root.querySelector('.rv-strip').innerHTML = '<div class="hd"><b>포토&amp;동영상</b><button type="button" class="all">전체보기 ›</button></div><div class="row">'
-          + vs.map(function(v){ return '<button type="button" class="t" data-id="' + v.id + '">' + firstThumb(v) + '</button>'; }).join('') + '</div>';
+          + vs.map(function(v, i){ return '<button type="button" class="t" data-id="' + v.id + '">' + firstThumb(v) + (i === vs.length - 1 ? '<span class="more">전체보기</span>' : '') + '</button>'; }).join('') + '</div>';
       });
     }
     load().then(function(x){
@@ -121,6 +141,7 @@
     }).catch(function(){ root.querySelector('.rv-list').innerHTML = '<div class="rv-empty">리뷰를 불러오지 못했습니다.</div>'; });
     root.querySelector('.rv-pg').addEventListener('click', function(e){ var b = e.target.closest('button'); if (b && !b.disabled) go(+b.dataset.p); });
     root.querySelector('.rv-sort').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; state.sort = b.dataset.sort; root.querySelectorAll('.rv-sort button').forEach(function(x){ x.classList.toggle('on', x === b); }); go(1); });
+    var rs = root.querySelector('.rv-sel'); if (rs) rs.addEventListener('change', function(){ state.sort = rs.value; root.querySelectorAll('.rv-sort button').forEach(function(x){ x.classList.toggle('on', x.dataset.sort === rs.value); }); go(1); });
     var mb = root.querySelector('.rv-media');
     function setMedia(on){ state.media = on; mb.classList.toggle('on', on); }
     mb.addEventListener('click', function(){ setMedia(!state.media); go(1); });
@@ -138,24 +159,31 @@
     root.addEventListener('click', function(e){
       var m = e.target.closest('.rv-more');
       if (m){ var msg = m.previousElementSibling; msg.classList.toggle('clamp'); m.textContent = msg.classList.contains('clamp') ? '리뷰 더보기' : '접기'; return; }
-      if (e.target.closest('.rv-strip .all')){ setMedia(true); go(1); return; }
+      if (e.target.closest('.rv-strip .all') || e.target.closest('.rv-strip .more')){ setMedia(true); go(1); return; }
       var t = e.target.closest('.t'); if (t){ openReview(+t.dataset.id, t.dataset.k); }
     });
   }
 
+  var MEDIA_IC = '<svg class="mi" width="20" height="20" viewBox="0 0 20 20" fill="none"><g stroke="#fff" stroke-linejoin="round" style="filter:drop-shadow(1px 1px 1px rgba(0,0,0,.4))"><rect x="4.625" y="6.625" width="8.75" height="8.75" rx=".775" fill="#fff" stroke-width="1.25"/><path d="M8.421 4h5.053A2.526 2.526 0 0116 6.526v5.053" stroke-width="1.263" stroke-linecap="round"/></g></svg>';
+  function galThumb(v){
+    var n = (v.v || []).length + (v.i || []).length, h;
+    if (v.v && v.v.length){ var x = v.v[0]; h = '<video src="' + esc(u(x[3] || x[1])) + '" poster="' + esc(u(x[2])) + '" muted loop playsinline autoplay preload="metadata"></video>'; }
+    else h = v.i && v.i.length ? '<img src="' + esc(gal(v.i[0][0])) + '" alt="" loading="lazy">' : '';
+    return h + (n > 1 ? MEDIA_IC : v.v && v.v.length ? '<span class="play"></span>' : '');
+  }
   // ---------- gallery (product page) ----------
   function mountGallery(root, pc, per){
     if (root.dataset.ready) return; root.dataset.ready = '1'; root.classList.add('uan-rv-gal');
-    root.innerHTML = '<div class="op">ⓘ 리뷰 운영방식</div><div class="cards"></div><div class="rv-pg"></div>';
+    root.innerHTML = '<div class="op">' + INFO + '리뷰 운영방식</div><div class="cards"></div><div class="rv-pg"></div>';
     var page = 1, list = [];
     function render(){
       var pages = Math.ceil(list.length / per), slice = list.slice((page - 1) * per, page * per);
       fetchRows(slice.map(function(x){ return x.r; })).then(function(vs){
-        root.querySelector('.cards').innerHTML = vs.map(function(v, i){ return '<button type="button" class="card" data-id="' + v.id + '"><span class="ph">' + firstThumb(v) + '</span><span class="tx">' + esc(v.m) + '</span><span class="st">' + stars(v.s, 14) + '</span><span class="nm">' + esc(v.n) + '</span>' + (slice[i].pin ? '<span class="rv-pin">쇼핑몰 추천</span>' : '') + '</button>'; }).join('');
+        root.querySelector('.cards').innerHTML = vs.map(function(v, i){ return '<button type="button" class="card" data-id="' + v.id + '"><span class="ph">' + galThumb(v) + '</span><span class="tx">' + esc(v.m) + '</span><span class="st">' + stars(v.s, 14) + '</span><span class="nm">' + esc(v.n) + '</span>' + (slice[i].pin ? '<span class="rv-pin">쇼핑몰 추천</span>' : '') + '</button>'; }).join('');
       });
-      var g = Math.floor((page - 1) / 5) * 5, h = '<button type="button" data-p="' + Math.max(1, g) + '"' + (g ? '' : ' disabled') + '>‹</button>';
-      for (var i = g + 1; i <= Math.min(pages, g + 5); i++) h += '<button type="button" data-p="' + i + '"' + (i === page ? ' class="on"' : '') + '>' + i + '</button>';
-      h += '<button type="button" data-p="' + (g + 6) + '"' + (g + 5 < pages ? '' : ' disabled') + '>›</button>';
+      var G = per < 8 ? 4 : 5, g = Math.floor((page - 1) / G) * G, h = '<button type="button" data-p="' + Math.max(1, g) + '"' + (g ? '' : ' disabled') + '>‹</button>';
+      for (var i = g + 1; i <= Math.min(pages, g + G); i++) h += '<button type="button" data-p="' + i + '"' + (i === page ? ' class="on"' : '') + '>' + i + '</button>';
+      h += '<button type="button" data-p="' + (g + G + 1) + '"' + (g + G < pages ? '' : ' disabled') + '>›</button>';
       root.querySelector('.rv-pg').innerHTML = pages > 1 ? h : '';
     }
     load().then(function(D){ list = ((D.prod[pc] || {}).gal || []).map(function(x){ return {r:D.byId[x[0]], pin:x[1]}; }).filter(function(x){ return x.r; }); render(); });
@@ -167,7 +195,7 @@
     if (root.dataset.ready) return; root.dataset.ready = '1'; root.classList.add('uan-rv-opt');
     load().then(function(D){
       var P = D.prod[pc] || {}, rows = (P.opt || []).map(function(id){ return D.byId[id]; }).filter(Boolean), at = 0;
-      root.innerHTML = '<div class="hd"><b>구매옵션별 리뷰 모아보기</b><span>ⓘ 리뷰 운영방식</span></div><select aria-label="구매옵션"><option>전체 ' + esc(P.optTitle || '상품 구성(선택)') + '</option>' + (P.optNames || []).map(function(n){ return '<option>' + esc(n) + '</option>'; }).join('') + '</select><div class="bd"></div><div class="nav"><button type="button" class="p" aria-label="이전">‹</button><span class="c"></span><button type="button" class="n" aria-label="다음">›</button></div>';
+      root.innerHTML = '<div class="hd"><b>구매옵션별 리뷰 모아보기</b><span>' + INFO + '리뷰 운영방식</span></div><select aria-label="구매옵션"><option>전체 ' + esc(P.optTitle || '상품 구성(선택)') + '</option>' + (P.optNames || []).map(function(n){ return '<option>' + esc(n) + '</option>'; }).join('') + '</select><div class="bd"></div><div class="nav"><button type="button" class="p" aria-label="이전">‹</button><span class="c"></span><button type="button" class="n" aria-label="다음">›</button></div>';
       fetchRows(rows).then(function(vs){
         function show(){ var v = vs[at]; if (!v) return; root.querySelector('.bd').innerHTML = '<button type="button" class="ph" data-id="' + v.id + '">' + firstThumb(v) + '</button><div class="tx"><div class="st">' + stars(v.s, 14) + '<b>' + LABEL[v.s] + '</b></div><p>' + esc(v.m) + '</p></div>'; root.querySelector('.c').textContent = (at + 1) + '/' + vs.length; }
         root.querySelector('.p').onclick = function(){ at = (at + vs.length - 1) % vs.length; show(); };
